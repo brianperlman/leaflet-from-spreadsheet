@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Leaflet Map</title>
+    <link rel="stylesheet" href="leaflet/leaflet.css">
+    <style>
+        #mapid { height: 100vh; }
+    </style>
+</head>
+
+<body>
+    <div id="mapid"></div>
+    <script src="leaflet/leaflet.js"></script>
+    <script src="js/leaflet-heat.js"></script>
+    <script src="js/d3.v5.min.js"></script>
+    <script type="text/javascript">
+
+
+
+    //starting position of the map
+    var mymap = L.map('mapid').setView([37.861422,-122.284490], 13);
+
+    var CartoDB_Positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+    }).addTo(mymap);
+
+
+    d3.csv("raw.csv").then(function(data){
+
+        var heat = [];
+
+        data.forEach(function(d){
+
+               if(+d["lat"] && +d["long"])
+
+                heat.push([+d["lat"], +d["long"]])
+
+
+
+            // L.marker([+d["lat"],+d["long"]]) //{icon: L.icon({iconUrl: "" })}
+            //     // .bindPopup("<h2>" + d["Title"] + "</h2><p>" + d["Description"] + "</p>")
+            //     .addTo(mymap);
+
+        });
+
+        L.heatLayer(heat, {radius: 20}).addTo(mymap);
+
+
+    });
+
+
+    </script>
+</body>
+
+</html>
